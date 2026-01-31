@@ -1,26 +1,133 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* Pixel Font */
+@font-face {
+  font-family: 'PixelFont';
+  src: url('/fonts/pixel-font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom Pixel Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Soft Pastel Colors */
+  --lavender: 230 230 250;
+  --mint: 181 234 215;
+  --peach: 255 218 185;
+  --blush: 255 182 193;
+  --sky: 181 216 235;
+  --cream: 255 248 231;
+  --charcoal: 74 74 74;
+  --slate: 107 114 128;
+  --border: 212 212 212;
+  --shadow: 196 183 166;
+  
+  /* Status Colors */
+  --success: 168 213 186;
+  --warning: 249 228 183;
+  --error: 245 183 177;
+  --info: 169 204 227;
+  
+  /* Spacing for pixel-perfect design */
+  --pixel-unit: 4px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Pixel Art Rendering */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Pixel Font Classes */
+.font-pixel {
+  font-family: 'PixelFont', 'Press Start 2P', monospace;
 }
 
+/* Pixel Border Style */
+.pixel-border {
+  border: 2px solid rgb(var(--charcoal));
+  box-shadow: 
+    4px 4px 0 rgb(var(--shadow)),
+    -1px -1px 0 rgb(var(--border)) inset;
+}
+
+/* Pixel Card Shadow */
+.pixel-shadow {
+  box-shadow: 
+    4px 4px 0 rgb(var(--shadow)),
+    8px 8px 0 rgba(var(--charcoal), 0.1);
+}
+
+/* Pixel Button Hover Effect */
+.pixel-hover {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.pixel-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 
+    6px 6px 0 rgb(var(--shadow)),
+    10px 10px 0 rgba(var(--charcoal), 0.1);
+}
+
+.pixel-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 
+    2px 2px 0 rgb(var(--shadow));
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--cream));
+  border: 2px solid rgb(var(--border));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--mint));
+  border: 2px solid rgb(var(--charcoal));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--sky));
+}
+
+/* Base Styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(
+    135deg,
+    rgb(var(--cream)) 0%,
+    rgb(var(--lavender)) 100%
+  );
+  min-height: 100vh;
+  color: rgb(var(--charcoal));
+}
+
+/* Animation for pixel decorations */
+@keyframes pixel-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.pixel-float {
+  animation: pixel-float 3s ease-in-out infinite;
+}
+
+@keyframes pixel-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pixel-blink {
+  animation: pixel-blink 1s step-end infinite;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
