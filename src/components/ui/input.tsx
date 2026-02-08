@@ -1,25 +1,56 @@
-import * as React from 'react';
+import { forwardRef, type InputHTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils/cn';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
+const inputVariants = cva(
+  [
+    'flex w-full',
+    'bg-elevated border-2 border-border-subtle',
+    'text-sm text-foreground placeholder:text-foreground-muted',
+    'transition-all duration-fast ease-out-expo',
+    'focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20',
+    'hover:border-border-default',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    'file:border-0 file:bg-transparent file:text-sm file:font-medium',
+  ],
+  {
+    variants: {
+      inputSize: {
+        sm: 'h-9 px-3 text-xs',
+        md: 'h-11 px-4',
+        lg: 'h-12 px-5 text-base',
+      },
+      hasError: {
+        true: 'border-error focus:border-error focus:ring-error/20',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inputSize: 'md',
+      hasError: false,
+    },
+  }
+);
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
-  return (
-    <input
-      type={type}
-      className={cn(
-        'flex h-10 w-full rounded-none border-2 border-[rgb(var(--border))] bg-white px-3 py-2 text-sm',
-        'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-        'placeholder:text-[rgb(var(--slate))]',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--mint))] focus-visible:ring-offset-2',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
+    VariantProps<typeof inputVariants> {
+  hasError?: boolean;
+}
+
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, inputSize, hasError, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(inputVariants({ inputSize, hasError, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+
 Input.displayName = 'Input';
 
-export { Input };
+export { Input, inputVariants };

@@ -19,7 +19,8 @@ interface AuthState {
 export function useAuth() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { setUser, cleanUser } = useAuthStore();
+  const { setUser, cleanUser, isHydrated } = useAuthStore();
+  const storedUser = useAuthStore((state) => state.user);
   const [authState, setAuthState] = useState<AuthState>({
     pendingApproval: false,
   })
@@ -29,7 +30,7 @@ export function useAuth() {
     queryFn: authApi.getCurrentUser,
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    enabled: false
+    enabled: isHydrated && !!storedUser, // Only fetch if hydrated and has stored user
   })
 
   const loginMutation = useMutation({
@@ -42,7 +43,7 @@ export function useAuth() {
         });
         toast({
           title: 'Menunggu Persetujuan',
-          description: 'Sabar ya lagi di cek',
+          description: 'Sabar ya lagi di cek kidsss',
         });
       }
       else if (data.status === 'rejected') {
@@ -129,15 +130,18 @@ export function useAuth() {
     });
   };
 
+  // Use fetched user or fallback to stored user
+  const currentUser = user ?? storedUser;
+
   return {
-    user,
-    isLoading,
-    isAuthenticated: !!user && !isError && user.regristrationStatus === 'approved',
-    isAdmin: user?.role === 'admin' && user.regristrationStatus === 'approved',
+    user: currentUser,
+    isLoading: !isHydrated || isLoading,
+    isAuthenticated: !!currentUser && !isError && currentUser.regristrationStatus === 'approved',
+    isAdmin: currentUser?.role === 'admin' && currentUser.regristrationStatus === 'approved',
     isPending: authState.pendingApproval || authState.userStatus === 'pending',
     isRejected: authState.userStatus === 'rejected',
     rejectedReason: authState.rejectedReason,
-    userStatus: user?.regristrationStatus || authState.userStatus,
+    userStatus: currentUser?.regristrationStatus || authState.userStatus,
     login: loginMutation.mutate,
     register: RegistrationMutation.mutate,
     logout: logoutMutation.mutate,

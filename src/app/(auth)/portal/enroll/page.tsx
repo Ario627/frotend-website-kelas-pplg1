@@ -1,16 +1,16 @@
 'use client';
 
-import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
-import { PixelCard } from "@/components/pixel/pixel-card";
-import { PixelButton } from "@/components/pixel/pixel-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, type RegisterFormData } from "@/lib/validators/auth.schema";
-import { Eye, EyeOff, Lock, Mail, User, Key, Clock, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+import { PixelCard } from '@/components/pixel/pixel-card';
+import { PixelButton } from '@/components/pixel/pixel-button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { registerSchema, type RegisterFormData } from '@/lib/validators/auth.schema';
+import { Eye, EyeOff, Lock, Mail, User, Key, Clock, CheckCircle, RefreshCw } from 'lucide-react';
 
 export default function RegisterPage() {
   const {
@@ -48,6 +48,7 @@ export default function RegisterPage() {
     reset();
   }
 
+  // Tampilan jika pendaftaran berhasil atau pending
   if (isPending || registrationComplete) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[rgb(var(--cream))] to-[rgb(var(--lavender))]">
@@ -57,7 +58,7 @@ export default function RegisterPage() {
           </div>
 
           <h1 className="font-pixel text-lg text-[rgb(var(--charcoal))] mb-3">
-            Pendaftaran Berhasil! 🎉
+            Pendaftaran Berhasil!
           </h1>
 
           <p className="text-sm text-[rgb(var(--slate))] mb-6">
@@ -65,7 +66,7 @@ export default function RegisterPage() {
           </p>
 
           <div className="bg-[rgb(var(--warning))]/10 pixel-border p-4 mb-6">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center justify-center gap-2 mb-2">
               <Clock className="w-4 h-4 text-[rgb(var(--warning))]" />
               <span className="font-pixel text-xs text-[rgb(var(--charcoal))]">Status: Menunggu</span>
             </div>
@@ -81,10 +82,19 @@ export default function RegisterPage() {
               </PixelButton>
             </Link>
 
-            <Link href="/">
-              <PixelButton variant="outline" className="w-full">
-                Kembali ke Beranda
-              </PixelButton>
+            <PixelButton
+              variant="outline"
+              className="w-full"
+              onClick={handleRegisterAnother}
+            >
+              <RefreshCw size={16} />
+              Daftar Akun Lain
+            </PixelButton>
+
+            <Link href="/" className="block">
+              <span className="text-xs text-[rgb(var(--slate))] hover:text-[rgb(var(--charcoal))]">
+                ← Kembali ke Beranda
+              </span>
             </Link>
           </div>
 
@@ -96,14 +106,14 @@ export default function RegisterPage() {
     );
   }
 
+  // Tampilan form pendaftaran normal
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[rgb(var(--cream))] to-[rgb(var(--lavender))]">
       {/* Subtle pixel decorations */}
       <div className="fixed inset-0 pointer-events-none opacity-20">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[rgb(var(--mint))]" />
         <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-[rgb(var(--peach))]" />
         <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-[rgb(var(--blush))]" />
-        <div className="absolute bottom-1/3 right-1/4 w-2 h-2 bg-[rgb(var(--sky))]" />
       </div>
 
       <PixelCard className="w-full max-w-md p-8" hover={false}>
@@ -119,7 +129,7 @@ export default function RegisterPage() {
         {/* Info Banner */}
         <div className="bg-[rgb(var(--info))]/10 pixel-border p-3 mb-6">
           <p className="text-xs text-[rgb(var(--charcoal))]">
-            ⚠️ <strong>Perhatian:</strong> Pendaftaran memerlukan persetujuan admin sebelum dapat login.
+            <strong>Perhatian:</strong> Pendaftaran memerlukan persetujuan admin sebelum dapat login.
           </p>
         </div>
 
@@ -216,7 +226,7 @@ export default function RegisterPage() {
 
           <div className="space-y-2">
             <Label htmlFor="secretCode" className="font-pixel text-xs">
-              Kode Rahasia (Opsional)
+              Kode Rahasia (Opsional dan masih belum bisa dipakai)
             </Label>
             <div className="relative">
               <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[rgb(var(--slate))]" />
@@ -242,17 +252,25 @@ export default function RegisterPage() {
           <PixelButton
             type="submit"
             variant="mint"
-            className="w-full"
+            className="w-full cursor-pointer"
             isLoading={isRegisterLoading}
           >
             Daftar
           </PixelButton>
         </form>
 
+        {/* Info box */}
+        <div className="mt-6 p-3 bg-[rgb(var(--info))]/90 pixel-border text-xs">
+          <strong>Catatan:</strong>
+            <p className="text-xs">
+              Akun baru memerlukan persetujuan admin sebelum dapat login
+            </p>
+        </div>
+
         <div className="mt-6 text-center space-y-2">
           <Link
             href="/portal/gate"
-            className="text-xs text-[rgb(var(--mint))] hover:underline block"
+            className="text-xs text-black hover:underline block"
           >
             Sudah punya akun? Masuk
           </Link>

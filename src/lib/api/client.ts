@@ -21,21 +21,49 @@ apiClient.interceptors.request.use(
   }
 );
 
+// Flag to prevent multiple refresh attempts
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const onRefreshed = () => {
+  refreshSubscribers.forEach((callback) => callback(''));
+  refreshSubscribers = [];
+};
+
+const addRefreshSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push(callback);
+};
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip refresh for auth endpoints to prevent infinite loop
+    const isAuthEndpoint = originalRequest?.url?.includes('/auth/');
+    
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+      if (isRefreshing) {
+        // Wait for the refresh to complete
+        return new Promise((resolve) => {
+          addRefreshSubscriber(() => {
+            resolve(apiClient(originalRequest));
+          });
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         await apiClient.post('/auth/refresh');
+        isRefreshing = false;
+        onRefreshed();
         return apiClient(originalRequest);
       } catch (refreshError) {
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
+        isRefreshing = false;
+        refreshSubscribers = [];
+        // Don't redirect here - let the auth provider handle cleanup
         return Promise.reject(refreshError);
       }
     }
