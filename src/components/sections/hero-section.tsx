@@ -77,7 +77,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-center px-4 py-20 overflow-hidden">
+    <section className="relative flex min-h-[57vh] items-center justify-center px-4 pt-16 pb-10 overflow-hidden">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 pointer-events-none">
         <div

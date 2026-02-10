@@ -224,7 +224,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center space-y-2">
           <Link 
             href="/portal/enroll" 
-            className="text-xs text-[rgb(var(--mint))] hover:underline block"
+            className="text-xs text-black hover:underline block"
           >
             Belum punya akun? Daftar
           </Link>
