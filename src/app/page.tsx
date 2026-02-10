@@ -13,6 +13,8 @@ export default function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <AnnouncementPreview />
+        <LoginPage />
+        <RegisterPage />
       </main>
     </div>
   )
