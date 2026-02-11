@@ -34,7 +34,6 @@ export default function RegisterPage() {
       email: data.email,
       password: data.password,
       name: data.name,
-      secertCode: data.secretCode,
     }, {
       onSuccess: () => {
         setRegistrationComplete(true);
