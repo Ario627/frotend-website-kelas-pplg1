@@ -22,7 +22,7 @@ const pixelDecorations = [
 ];
 
 // Letters for scatter animation
-const letters = ['X', ' ', 'P', 'P', 'L', 'G', ' ', '1'];
+const letters = [' ', 'P', 'P', 'L', 'G', ' ', '1'];
 
 // Random scatter positions for each letter
 const getRandomScatter = () => ({
