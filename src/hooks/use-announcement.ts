@@ -7,8 +7,11 @@ import { toast } from "./use-toast"
 
 export function useAnnouncements(page = 1, limit = 10) {
     return useQuery({
-        queryKey: ['announcements', 'active'],
+        queryKey: ['announcements', 'active', page, limit],
         queryFn: () => announcementsApi.getActive(),
+        refetchInterval: 20000, // Update setiap 20 detik
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
     });
 }
 

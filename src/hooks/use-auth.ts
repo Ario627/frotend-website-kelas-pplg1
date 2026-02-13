@@ -36,37 +36,47 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: (credential: LoginCredentials) => authApi.login(credential),
     onSuccess: (data) => {
-      if (data.status === 'pending') {
+      const user = data.user;
+
+      if(user?.regristrationStatus === 'pending') {
         setAuthState({
           pendingApproval: true,
           userStatus: 'pending',
         });
         toast({
           title: 'Menunggu Persetujuan',
-          description: 'Sabar ya lagi di cek kidsss',
+          description: 'Akun Anda sedang menunggu persetujuan dari admin.',
         });
+        return;
       }
-      else if (data.status === 'rejected') {
+
+      if(user?.regristrationStatus === 'rejected') {
         setAuthState({
           pendingApproval: false,
           userStatus: 'rejected',
-          rejectedReason: data.message,
         });
         toast({
-          title: 'Akun ditolak',
-          description: data.message,
+          title: 'Akun Ditolak',
+          description: 'Silahkan hubungi admin untuk koordinasi lebih lanjut',
           variant: 'destructive',
         });
+        return;
       }
-      else if (data.status === 'approved' && data.user) {
-        setUser(data.user);
-        queryClient.setQueryData(['auth', 'me'], data.user);
-        toast({
-          title: 'Login berhasil',
-          description: `Selamat atas diterimanya, ${data.user.name}`
-        });
+
+      setUser(user!);
+      queryClient.setQueryData(['auth', 'me'], user);
+
+      toast({
+        title: 'Login Berhasil',
+        description: `Selamat datang kembali, ${user?.name}!`,
+      });
+
+      if (user?.role === 'admin') {
         router.push('/dashboard');
+      } else {
+        router.push('/');
       }
+      
     },
 
     onError: (error: any) => {
@@ -89,13 +99,12 @@ export function useAuth() {
         });
         toast({
           title: 'Registrasi Berhasil',
-          description: 'Silakan tunggu persetujuan admin.',
+          description: 'KetuaKelas1357900Silakan tunggu persetujuan admin.',
         });
       }
       else if (data.status === 'approved' && data.user) {
         setUser(data.user);
         queryClient.setQueryData(['auth', 'me'], data.user);
-        router.push('/dashboard');
       }
     },
     onError: (error: any) => {

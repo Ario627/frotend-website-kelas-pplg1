@@ -15,7 +15,9 @@ export function usePendingUsers() {
   return useQuery({
     queryKey: ['users', 'pending'],
     queryFn: () => usersApi.getPending(),
-    refetchInterval: 30000,
+    retry: 1,
+    refetchInterval: 100000,
+    refetchOnWindowFocus: false,
   });
 }
 

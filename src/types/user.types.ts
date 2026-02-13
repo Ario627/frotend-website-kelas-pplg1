@@ -59,7 +59,7 @@ export interface RejectUserDto {
 export interface PendingUser {
   id: number;
   email: string;
-  neme: string;
+  name: string;
   role: 'admin' | 'user';
   status: RegristrationStatus;
   createdAt: Date;
