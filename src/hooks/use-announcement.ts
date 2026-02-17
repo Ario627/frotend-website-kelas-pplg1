@@ -5,9 +5,9 @@ import { announcementsApi } from "@/lib/api/announcements"
 import type { CreateAnnouncementDto, UpdateAnnouncementDto } from "@/types/api.types"
 import { toast } from "./use-toast"
 
-export function useAnnouncements(page = 1, limit = 10) {
+export function useAnnouncements() {
     return useQuery({
-        queryKey: ['announcements', 'active', page, limit],
+        queryKey: ['announcements', 'active'],
         queryFn: () => announcementsApi.getActive(),
         refetchInterval: 20000, // Update setiap 20 detik
         refetchOnWindowFocus: true,

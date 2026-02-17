@@ -5,15 +5,15 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { PixelCard } from '@/components/pixel/pixel-card';
 import { PixelButton } from '@/components/pixel/pixel-button';
-import { useAnnouncements } from '@/hooks/use-announcement'; 
+import { useAnnouncements } from '@/hooks/use-announcement';
 import { usePendingUsers, useApproveUser, useRejectUser } from '@/hooks/use-users';
-import { useAuth } from '@/hooks/use-auth'; 
+import { useAuth } from '@/hooks/use-auth';
 import { formatRelativeTime } from '@/lib/utils/format-date';
 import { Skeleton } from '@/components/shared/loading-skeleton';
-import { 
-  Megaphone, 
-  Image, 
-  Users, 
+import {
+  Megaphone,
+  Image,
+  Users,
   Rocket,
   Clock,
   CheckCircle,
@@ -36,22 +36,22 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 8 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.3 }
   },
 };
 
-function StatCard({ 
-  label, 
-  value, 
-  icon: Icon, 
+function StatCard({
+  label,
+  value,
+  icon: Icon,
   href,
-  trend 
-}: { 
-  label: string; 
-  value: number; 
+  trend
+}: {
+  label: string;
+  value: number;
   icon: React.ElementType;
   href: string;
   trend?: string;
@@ -81,13 +81,13 @@ function StatCard({
   );
 }
 
-function PendingUserCard({ 
-  user, 
-  onApprove, 
+function PendingUserCard({
+  user,
+  onApprove,
   onReject,
   isApproving,
-  isRejecting 
-}: { 
+  isRejecting
+}: {
   user: PendingUser;
   onApprove: () => void;
   onReject: () => void;
@@ -143,7 +143,7 @@ function PendingUsersWidget() {
   const { data: pendingUsers, isPending: isLoading } = usePendingUsers();
   const approveMutation = useApproveUser();
   const rejectMutation = useRejectUser();
-  
+
   const [optimisticUsers, updateOptimisticUsers] = useOptimistic(
     pendingUsers || [],
     (state, removedId: string) => state.filter(u => u.id !== Number(removedId))
@@ -182,7 +182,7 @@ function PendingUsersWidget() {
           </span>
         )}
       </div>
-      
+
       {isLoading ? (
         <div className="space-y-2">
           {[1, 2, 3].map((i) => (
@@ -208,7 +208,7 @@ function PendingUsersWidget() {
               isRejecting={rejectMutation.isPending}
             />
           ))}
-          
+
           {count > 4 && (
             <Link href="/dashboard/users">
               <PixelButton variant="ghost" className="w-full mt-2 cursor-pointer" size="sm">
@@ -225,29 +225,29 @@ function PendingUsersWidget() {
 
 function QuickActions() {
   const actions = [
-    { 
-      label: 'Pengumuman', 
-      icon: Megaphone, 
+    {
+      label: 'Pengumuman',
+      icon: Megaphone,
       href: '/dashboard/announcements',
-      color: 'bg-[rgb(var(--peach))/0.3]' 
+      color: 'bg-[rgb(var(--peach))/0.3]'
     },
-    { 
-      label: 'Upload Foto', 
-      icon: Image, 
+    {
+      label: 'Upload Foto',
+      icon: Image,
       href: '/dashboard/gallery',
-      color: 'bg-[rgb(var(--mint))/0.3]' 
+      color: 'bg-[rgb(var(--mint))/0.3]'
     },
-    { 
-      label: 'Anggota', 
-      icon: Users, 
+    {
+      label: 'Anggota',
+      icon: Users,
       href: '/dashboard/members',
-      color: 'bg-[rgb(var(--blush))/0.3]' 
+      color: 'bg-[rgb(var(--blush))/0.3]'
     },
-    { 
-      label: 'Proyek', 
-      icon: Rocket, 
+    {
+      label: 'Proyek',
+      icon: Rocket,
       href: '/dashboard/projects',
-      color: 'bg-[rgb(var(--sky))/0.3]' 
+      color: 'bg-[rgb(var(--sky))/0.3]'
     },
   ];
 
@@ -259,7 +259,7 @@ function QuickActions() {
           Aksi Cepat
         </h2>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-2">
         {actions.map((action) => (
           <Link key={action.label} href={action.href}>
@@ -277,7 +277,7 @@ function QuickActions() {
 }
 
 function RecentActivity() {
-  const { data: announcements, isPending } = useAnnouncements(1, 5);
+  const { data: announcements, isPending } = useAnnouncements();
 
   return (
     <PixelCard hover={false} className="p-5">
@@ -293,7 +293,7 @@ function RecentActivity() {
             <Skeleton key={i} className="h-12" />
           ))}
         </div>
-      ) : !announcements?.data.length ? (
+      ) : !announcements?.length ? (
         <div className="text-center py-8">
           <Calendar className="w-10 h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
           <p className="text-sm text-[rgb(var(--slate))]">
@@ -302,8 +302,8 @@ function RecentActivity() {
         </div>
       ) : (
         <div className="space-y-2">
-          {announcements.data.slice(0, 4).map((item) => (
-            <div 
+          {announcements.slice(0, 4).map((item) => (
+            <div
               key={item.id}
               className="flex items-center gap-3 p-2.5 bg-[rgb(var(--stone))] border border-[rgb(var(--border))]"
             >
@@ -328,13 +328,13 @@ function RecentActivity() {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { data: announcements } = useAnnouncements(1, 1);
+  const { data: announcements } = useAnnouncements();
   const { data: pendingUsers } = usePendingUsers();
 
   const stats = [
-    { 
-      label: 'Pengumuman', 
-      value: announcements?.meta?.total || 0, 
+    {
+      label: 'Pengumuman',
+      value: announcements?.length || 0,
       icon: Megaphone,
       href: '/dashboard/announcements',
       trend: '+2 minggu ini'
@@ -362,8 +362,8 @@ export default function DashboardPage() {
   const pendingCount = pendingUsers?.length || 0;
 
   return (
-    
-    <motion.div 
+
+    <motion.div
       className="space-y-6"
       variants={containerVariants}
       initial="hidden"
@@ -399,7 +399,7 @@ export default function DashboardPage() {
         </motion.div>
       )}
 
-      <motion.div 
+      <motion.div
         variants={itemVariants}
         className="grid grid-cols-2 lg:grid-cols-4 gap-4"
       >
@@ -408,14 +408,14 @@ export default function DashboardPage() {
         ))}
       </motion.div>
 
-      <motion.div 
+      <motion.div
         variants={itemVariants}
         className="grid grid-cols-1 lg:grid-cols-3 gap-4"
       >
         <PendingUsersWidget />
-        
+
         <QuickActions />
-        
+
         <RecentActivity />
       </motion.div>
     </motion.div>

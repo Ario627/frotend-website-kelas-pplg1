@@ -3,13 +3,12 @@ import { apiClient } from './client'
 import type {
     Announcement,
     CreateAnnouncementDto,
-    PaginationResponse,
     UpdateAnnouncementDto
 } from '@/types/api.types'
 
 export const announcementsApi = {
     getActive: async () => {
-        const response = await apiClient.get<PaginationResponse<Announcement>>(
+        const response = await apiClient.get<Announcement[]>(
             '/announcements'
         );
         return response.data;

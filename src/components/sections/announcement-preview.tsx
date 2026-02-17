@@ -30,11 +30,11 @@ const itemVariants = {
 }
 
 export function AnnouncementPreview() {
-  const { data, isPending } = useAnnouncements(1, 3);
+  const { data, isPending } = useAnnouncements();
 
   return (
     <section className="py-10 px-4 relative">
-      
+
       {/*Background Decoration*/}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -75,7 +75,7 @@ export function AnnouncementPreview() {
               <Skeleton key={i} className="h-36" />
             ))}
           </div>
-        ) : !data?.data?.length ? (
+        ) : !data?.length ? (
           <PixelCard hover={false} className="text-center py-12">
             <Megaphone className="w-10 h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
             <p className="text-sm text-[rgb(var(--slate))]">
@@ -90,7 +90,7 @@ export function AnnouncementPreview() {
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
           >
-            {data.data.map((announcement) => {
+            {data.map((announcement) => {
               const priority = priorityConfig[announcement.priority];
               const PriorityIcon = priority.icon;
 
