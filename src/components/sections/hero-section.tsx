@@ -90,7 +90,6 @@ export function HeroSection() {
             backgroundSize: '32px 32px',
           }}
         />
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-rgb(var(--cream))" />
       </div>
 
       {/* Pixel Decorations */}
@@ -261,9 +260,6 @@ export function HeroSection() {
           ))}
         </motion.div>
       </motion.div>
-
-      {/* Bottom Decorative Line */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgb(var(--border))] to-transparent" />
     </section>
   );
 }

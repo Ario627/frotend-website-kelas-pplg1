@@ -1,28 +1,41 @@
-export type ReactionType = '👍' | '❤️' | '😂' | '😮' | '😢' | '🔥';
+// Match dengan backend enum ReactionType
+export enum ReactionType {
+  LIKE = 'like',
+  LOVE = 'love',
+  HAHA = 'haha',
+  WOW = 'wow',
+  SAD = 'sad',
+  ANGRY = 'angry',
+}
 
-export const REACTION_EMOTES: ReactionType[] = ['👍', '❤️', '😂', '😮', '😢', '🔥'];
+// Mapping emoji untuk display
+export const REACTION_EMOJI_MAP: Record<ReactionType, string> = {
+  [ReactionType.LIKE]: '👍',
+  [ReactionType.LOVE]: '❤️',
+  [ReactionType.HAHA]: '😂',
+  [ReactionType.WOW]: '😮',
+  [ReactionType.SAD]: '😢',
+  [ReactionType.ANGRY]: '😡',
+};
 
-export interface AnnouncementReaction {
-  id: string;
-  announcementId: string;
-  visitorId: string;
-  visitorName?: string;
-  reaction: ReactionType;
-  createdAt: string;
+export const REACTION_TYPES = Object.values(ReactionType);
+
+export interface ReactionCount {
+  type: ReactionType;
+  count: number;
 }
 
 export interface AnnouncementView {
-  id: string;
+  id: number;
   announcementId: string;
-  visitorId: string;
-  visitorName?: string;
+  userId: number | null;
+  visitorId: string | null;
+  fingerprintHash: string | null;
   viewedAt: string;
-}
-
-export interface AnnouncementSettings {
-  enableViews: boolean;
-  enableReactions: boolean;
-  isPinned: boolean;
+  user?: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface Announcement {
@@ -30,41 +43,50 @@ export interface Announcement {
   title: string;
   content: string;
   priority: 'low' | 'medium' | 'high';
-  isPublished: boolean;
+  isActive: boolean;
   isPinned: boolean;
-  settings: AnnouncementSettings;
   viewCount: number;
-  reactions: Record<ReactionType, number>;
-  recentViewers: AnnouncementView[];
+  reactions: ReactionCount[];
+  userReaction?: ReactionType | null; // Reaction user yang sedang login (kalau ada)
   createdAt: string;
   updatedAt: string;
   author: {
-    id: string;
+    id: number;
     name: string;
   };
+}
+
+export interface AnnouncementWithStats extends Announcement {
+  totalReactions: number;
 }
 
 export interface CreateAnnouncementDto {
   title: string;
   content: string;
   priority?: 'low' | 'medium' | 'high';
-  isPublished?: boolean;
-  settings?: Partial<AnnouncementSettings>;
+  isActive?: boolean;
 }
 
 export interface UpdateAnnouncementDto extends Partial<CreateAnnouncementDto> {
   isPinned?: boolean;
 }
 
-export interface AddReactionDto {
+// Socket event payloads (match dengan backend)
+export interface ReactionUpdatePayload {
   announcementId: string;
-  reaction: ReactionType;
-  visitorId: string;
-  visitorName?: string;
+  reactions: ReactionCount[];
+  totalReactions: number;
+  userId: number;
+  reactionType: ReactionType | null;
+  action: 'add' | 'remove';
 }
 
-export interface RecordViewDto {
+export interface ViewUpdatePayload {
   announcementId: string;
-  visitorId: string;
-  visitorName?: string;
+  viewCount: number;
+  viewer?: {
+    id: number;
+    name: string;
+    viewedAt: Date;
+  };
 }

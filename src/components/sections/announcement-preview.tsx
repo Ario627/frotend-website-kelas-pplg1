@@ -1,123 +1,144 @@
-'use client'
+'use client';
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { PixelCard } from "../pixel/pixel-card"
-import { PixelButton } from "../pixel/pixel-button"
-import { Megaphone, ArrowRight, AlertCircle, AlertTriangle, Info } from "lucide-react"
-import { Skeleton } from "../shared/loading-skeleton"
-import { formatRelativeTime } from "@/lib/utils/format-date"
-import { useAnnouncements } from "@/hooks/use-announcement"
-
-const priorityConfig = {
-  urgent: { icon: AlertCircle, bg: 'bg-[rgb(var(--error))/0.25]' },
-  high: { icon: AlertCircle, bg: 'bg-[rgb(var(--error))/0.15]' },
-  medium: { icon: AlertTriangle, bg: 'bg-[rgb(var(--warning))/0.15]' },
-  low: { icon: Info, bg: 'bg-[rgb(var(--info))/0.15]' },
-}
+import { useState, useMemo } from 'react';
+import { motion } from 'motion/react';
+import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';;
+import { useAnnouncements } from '@/hooks/use-announcement';
+import { AnnouncementCard } from '../annnouncements/announcement-card';
+import { CreateAnnouncementDialog } from '../annnouncements/create-announcement-dialog';
+import { PixelButton } from '@/components/pixel/pixel-button';
+import { PixelCard } from '@/components/pixel/pixel-card';
+import { Skeleton } from '@/components/shared/loading-skeleton';
+import { Megaphone, ArrowRight, Plus } from 'lucide-react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { straggerChildren: 0.1 }
+    transition: { staggerChildren: 0.06 },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0 },
-}
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3 }
+  },
+};
 
 export function AnnouncementPreview() {
-  const { data, isPending } = useAnnouncements();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { isAdmin, isAuthenticated } = useAuth();
+  const { data: announcements, isPending, isError } = useAnnouncements();
+
+  // Sort: pinned first, then by date
+  const sortedAnnouncements = useMemo(() => {
+    if (!announcements) return [];
+    return [...announcements].sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+  }, [announcements]);
 
   return (
-    <section className="py-10 px-4 relative">
-
-      {/*Background Decoration*/}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgb(var(--charcoal)) 1px, transparent 1px),
-              linear-gradient(90deg, rgb(var(--charcoal)) 1px, transparent 1px)
-            `,
-            backgroundSize: '32px 32px',
-          }}
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-rgb(var(--cream))" />
-      </div>
-      <div className="container mx-auto max-w-5xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-[rgb(var(--peach))/0.3]">
-              <Megaphone size={18} className="text-[rgb(var(--charcoal))]" />
+    <>
+      <section className="py-10 px-4">
+        <div className="container mx-auto max-w-5xl">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[rgb(var(--peach))/0.3]">
+                <Megaphone size={18} className="text-[rgb(var(--charcoal))]" />
+              </div>
+              <h2 className="font-pixel text-lg text-[rgb(var(--charcoal))]">
+                Pengumuman
+              </h2>
             </div>
-            <h2 className="font-pixel text-lg text-[rgb(var(--charcoal))]">
-              Pengumuman
-            </h2>
-          </div>
-          <Link href="/announcements">
-            <PixelButton variant="ghost" size="sm">
-              Lihat Semua
-              <ArrowRight size={14} />
-            </PixelButton>
-          </Link>
-        </div>
 
-        {/* Content */}
-        {isPending ? (
-          <div className="grid md:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-36" />
-            ))}
-          </div>
-        ) : !data?.length ? (
-          <PixelCard hover={false} className="text-center py-12">
-            <Megaphone className="w-10 h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
-            <p className="text-sm text-[rgb(var(--slate))]">
-              Belum ada pengumuman
-            </p>
-          </PixelCard>
-        ) : (
-          <motion.div
-            className="grid md:grid-cols-3 gap-4"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-50px' }}
-          >
-            {data.map((announcement) => {
-              const priority = priorityConfig[announcement.priority];
-              const PriorityIcon = priority.icon;
+            <div className="flex items-center gap-2">
+              {/* Admin Create Button - Only visible for authenticated admin */}
+              {isAuthenticated && isAdmin && (
+                <PixelButton
+                  variant="mint"
+                  size="sm"
+                  onClick={() => setIsCreateOpen(true)}
+                >
+                  <Plus size={14} />
+                  <span className="hidden sm:inline">Buat</span>
+                </PixelButton>
+              )}
 
-              return (
+              <Link href="/announcements">
+                <PixelButton variant="ghost" size="sm">
+                  <span className="hidden sm:inline">Lihat Semua</span>
+                  <ArrowRight size={14} />
+                </PixelButton>
+              </Link>
+            </div>
+          </div>
+
+          {/* Content */}
+          {isPending ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-44" />
+              ))}
+            </div>
+          ) : isError ? (
+            <PixelCard hover={false} className="text-center py-12">
+              <p className="text-sm text-[rgb(var(--error))]">
+                Gagal memuat pengumuman
+              </p>
+            </PixelCard>
+          ) : sortedAnnouncements.length === 0 ? (
+            <PixelCard hover={false} className="text-center py-12">
+              <Megaphone className="w-10 h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
+              <p className="text-sm text-[rgb(var(--slate))] mb-4">
+                Belum ada pengumuman
+              </p>
+              {isAdmin && (
+                <PixelButton
+                  variant="mint"
+                  size="sm"
+                  onClick={() => setIsCreateOpen(true)}
+                >
+                  <Plus size={14} />
+                  Buat Pengumuman Pertama
+                </PixelButton>
+              )}
+            </PixelCard>
+          ) : (
+            <motion.div
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+            >
+              {sortedAnnouncements.slice(0, 6).map((announcement) => (
                 <motion.div key={announcement.id} variants={itemVariants}>
-                  <PixelCard className="p-5 h-full">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className={`p-1.5 ${priority.bg}`}>
-                        <PriorityIcon size={12} className="text-[rgb(var(--charcoal))]" />
-                      </div>
-                      <span className="text-[10px] text-[rgb(var(--muted))]">
-                        {formatRelativeTime(announcement.createdAt)}
-                      </span>
-                    </div>
-                    <h3 className="font-pixel text-xs text-[rgb(var(--charcoal))] mb-2 line-clamp-2">
-                      {announcement.title}
-                    </h3>
-                    <p className="text-xs text-[rgb(var(--slate))] line-clamp-3">
-                      {announcement.content}
-                    </p>
-                  </PixelCard>
+                  <AnnouncementCard
+                    announcement={announcement}
+                    showAdminActions={isAdmin}
+                  />
                 </motion.div>
-              );
-            })}
-          </motion.div>
-        )}
-      </div>
-    </section>
-  )
+              ))}
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      {/* Create Dialog - Only rendered for admin */}
+      {isAdmin && (
+        <CreateAnnouncementDialog
+          open={isCreateOpen}
+          onOpenChange={setIsCreateOpen}
+        />
+      )}
+    </>
+  );
 }
