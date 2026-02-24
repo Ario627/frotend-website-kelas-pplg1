@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>()(
           name: state.user.name,
           email: state.user.email,
           role: state.user.role,
-          regristrationStatus: state.user.regristrationStatus,
+          registrationStatus: state.user.registrationStatus,
         } : null,
         pendingApprovalEmail: state.pendingApprovalEmail,
       })

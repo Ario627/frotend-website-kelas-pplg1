@@ -1,4 +1,4 @@
-export type RegristrationStatus = 'pending' | 'approved' | 'rejected';
+export type RegistrationStatus = 'pending' | 'approved' | 'rejected';
 
 export interface User {
   id: number;
@@ -6,7 +6,7 @@ export interface User {
   email: string;
   password: string;
   role: 'admin' | 'user';
-  regristrationStatus: RegristrationStatus;
+  registrationStatus: RegistrationStatus;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -27,14 +27,14 @@ export interface RegistrationData {
 export interface LoginResponse {
   user?: User;
   message: string;
-  status: RegristrationStatus;
+  status: RegistrationStatus;
   requiresApproval?: boolean;
 }
 
 export interface RegistrationResponse {
   user: User;
   message: string;
-  status: RegristrationStatus;
+  status: RegistrationStatus;
 }
 
 export interface UpdateUserDto {
@@ -43,7 +43,7 @@ export interface UpdateUserDto {
   password?: string;
   avatarUrl?: string;
   role?: 'admin' | 'user';
-  status?: RegristrationStatus
+  status?: RegistrationStatus
   isActive?: boolean;
 }
 
@@ -61,6 +61,6 @@ export interface PendingUser {
   email: string;
   name: string;
   role: 'admin' | 'user';
-  status: RegristrationStatus;
+  status: RegistrationStatus;
   createdAt: Date;
 }

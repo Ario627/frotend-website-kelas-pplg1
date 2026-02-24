@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import LoginPage from "./(auth)/portal/gate/page";
 import RegisterPage from "./(auth)/portal/enroll/page";
 import { AnnouncementPreview } from "@/components/sections/announcement-preview";
+import { GalleryPreview } from "@/components/sections/gallery-preview";
 
 
 export default function HomePage() {
@@ -13,6 +14,7 @@ export default function HomePage() {
       <main className="flex-1">
         <HeroSection />
         <AnnouncementPreview />
+        <GalleryPreview />
         <LoginPage />
         <RegisterPage />
       </main>

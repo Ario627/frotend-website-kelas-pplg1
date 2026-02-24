@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
 
     // Skip refresh for auth endpoints to prevent infinite loop
     const isAuthEndpoint = originalRequest?.url?.includes('/auth/');
-    
+
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (isRefreshing) {
         // Wait for the refresh to complete

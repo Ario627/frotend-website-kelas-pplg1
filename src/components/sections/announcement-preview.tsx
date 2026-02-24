@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';;
+import { useAuth } from '@/hooks/use-auth';
 import { useAnnouncements } from '@/hooks/use-announcement';
 import { AnnouncementCard } from '../annnouncements/announcement-card';
 import { CreateAnnouncementDialog } from '../annnouncements/create-announcement-dialog';
@@ -16,16 +16,16 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.06 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3 }
+    transition: { duration: 0.35, ease: 'easeOut' as const }
   },
 };
 
@@ -34,7 +34,6 @@ export function AnnouncementPreview() {
   const { isAdmin, isAuthenticated } = useAuth();
   const { data: announcements, isPending, isError } = useAnnouncements();
 
-  // Sort: pinned first, then by date
   const sortedAnnouncements = useMemo(() => {
     if (!announcements) return [];
     return [...announcements].sort((a, b) => {
@@ -46,21 +45,20 @@ export function AnnouncementPreview() {
 
   return (
     <>
-      <section className="py-10 px-4">
+      <section className="py-6 sm:py-10 px-3 sm:px-4">
         <div className="container mx-auto max-w-5xl">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-[rgb(var(--peach))/0.3]">
-                <Megaphone size={18} className="text-[rgb(var(--charcoal))]" />
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-[rgb(var(--peach))/0.3]">
+                <Megaphone size={16} className="sm:w-4.5 sm:h-4.5 text-[rgb(var(--charcoal))]" />
               </div>
-              <h2 className="font-pixel text-lg text-[rgb(var(--charcoal))]">
+              <h2 className="font-pixel text-sm sm:text-lg text-[rgb(var(--charcoal))]">
                 Pengumuman
               </h2>
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Admin Create Button - Only visible for authenticated admin */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {isAuthenticated && isAdmin && (
                 <PixelButton
                   variant="mint"
@@ -83,21 +81,21 @@ export function AnnouncementPreview() {
 
           {/* Content */}
           {isPending ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-44" />
+                <Skeleton key={i} className="h-36 sm:h-44" />
               ))}
             </div>
           ) : isError ? (
-            <PixelCard hover={false} className="text-center py-12">
-              <p className="text-sm text-[rgb(var(--error))]">
+            <PixelCard hover={false} className="text-center py-8 sm:py-12">
+              <p className="text-xs sm:text-sm text-[rgb(var(--error))]">
                 Gagal memuat pengumuman
               </p>
             </PixelCard>
           ) : sortedAnnouncements.length === 0 ? (
-            <PixelCard hover={false} className="text-center py-12">
-              <Megaphone className="w-10 h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
-              <p className="text-sm text-[rgb(var(--slate))] mb-4">
+            <PixelCard hover={false} className="text-center py-8 sm:py-12">
+              <Megaphone className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-3 text-[rgb(var(--muted))]" />
+              <p className="text-xs sm:text-sm text-[rgb(var(--slate))] mb-4">
                 Belum ada pengumuman
               </p>
               {isAdmin && (
@@ -113,11 +111,11 @@ export function AnnouncementPreview() {
             </PixelCard>
           ) : (
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+              className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '-30px' }}
             >
               {sortedAnnouncements.slice(0, 6).map((announcement) => (
                 <motion.div key={announcement.id} variants={itemVariants}>
@@ -132,7 +130,6 @@ export function AnnouncementPreview() {
         </div>
       </section>
 
-      {/* Create Dialog - Only rendered for admin */}
       {isAdmin && (
         <CreateAnnouncementDialog
           open={isCreateOpen}
@@ -142,3 +139,4 @@ export function AnnouncementPreview() {
     </>
   );
 }
+

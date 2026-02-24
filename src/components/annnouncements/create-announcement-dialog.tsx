@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useCreateAnnouncement } from "@/hooks/use-announcement";
 import { PixelButton } from "../pixel/pixel-button";
@@ -17,7 +16,6 @@ const createSchema = z.object({
   title: z.string().min(5, 'Judul minimal 5 karakter').max(200, 'Judul maksimal 200 karakter'),
   content: z.string().min(10, 'Konten minimal 10 karakter'),
   priority: z.enum(['low', 'medium', 'high']),
-  isActive: z.boolean(),
 });
 
 type FormData = z.infer<typeof createSchema>;
@@ -42,7 +40,6 @@ export function CreateAnnouncementDialog({
     resolver: zodResolver(createSchema),
     defaultValues: {
       priority: 'medium',
-      isActive: true,
     },
   });
 
@@ -80,11 +77,11 @@ export function CreateAnnouncementDialog({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white border border-[rgb(var(--border))] shadow-[4px_4px_0_rgb(var(--shadow)/0.3)] p-6"
+            className="fixed inset-x-4 top-1/2 -translate-y-1/2 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-50 w-auto sm:w-full sm:max-w-lg max-h-[85vh] overflow-y-auto bg-white border border-[rgb(var(--border))] shadow-[4px_4px_0_rgb(var(--shadow)/0.3)] p-4 sm:p-6"
           >
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <Dialog.Title className="font-pixel text-sm text-[rgb(var(--charcoal))]">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <Dialog.Title className="font-pixel text-xs sm:text-sm text-[rgb(var(--charcoal))]">
                 Buat Pengumuman
               </Dialog.Title>
               <Dialog.Close
@@ -95,9 +92,9 @@ export function CreateAnnouncementDialog({
               </Dialog.Close>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
               {/* Title */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="title" className="text-xs font-medium">
                   Judul <span className="text-[rgb(var(--error))]">*</span>
                 </Label>
@@ -115,7 +112,7 @@ export function CreateAnnouncementDialog({
               </div>
 
               {/* Content */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="content" className="text-xs font-medium">
                   Konten <span className="text-[rgb(var(--error))]">*</span>
                 </Label>
@@ -123,7 +120,7 @@ export function CreateAnnouncementDialog({
                   id="content"
                   {...register('content')}
                   placeholder="Tulis pengumuman di sini..."
-                  rows={5}
+                  rows={4}
                   disabled={createMutation.isPending}
                 />
                 {errors.content && (
@@ -133,37 +130,21 @@ export function CreateAnnouncementDialog({
                 )}
               </div>
 
-              {/* Priority & Status */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="priority" className="text-xs font-medium">
-                    Prioritas
-                  </Label>
-                  <select
-                    id="priority"
-                    {...register('priority')}
-                    disabled={createMutation.isPending}
-                    className="w-full h-10 px-3 text-sm border border-[rgb(var(--border))] bg-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--mint))]"
-                  >
-                    <option value="low">Biasa</option>
-                    <option value="medium">Sedang</option>
-                    <option value="high">Penting</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="isActive" className="text-xs font-medium">
-                    Status
-                  </Label>
-                  <select
-                    id="isActive"
-                    {...register('isActive', { setValueAs: v => v === 'true' })}
-                    disabled={createMutation.isPending}
-                    className="w-full h-10 px-3 text-sm border border-[rgb(var(--border))] bg-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--mint))]"
-                  >
-                    <option value="true">Aktif</option>
-                    <option value="false">Nonaktif</option>
-                  </select>
-                </div>
+              {/* Priority */}
+              <div className="space-y-1.5">
+                <Label htmlFor="priority" className="text-xs font-medium">
+                  Prioritas
+                </Label>
+                <select
+                  id="priority"
+                  {...register('priority')}
+                  disabled={createMutation.isPending}
+                  className="w-full h-10 px-3 text-sm border border-[rgb(var(--border))] bg-white focus:outline-none focus:ring-2 focus:ring-[rgb(var(--mint))]"
+                >
+                  <option value="low">Biasa</option>
+                  <option value="medium">Sedang</option>
+                  <option value="high">Penting</option>
+                </select>
               </div>
 
               {/* Actions */}

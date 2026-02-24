@@ -5,7 +5,7 @@ import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/store/auth-store';
 import { useRouter } from 'next/navigation';
 import { toast } from './use-toast';
-import type { LoginCredentials, RegistrationData, RegristrationStatus } from '@/types/user.types';
+import type { LoginCredentials, RegistrationData, RegistrationStatus } from '@/types/user.types';
 import { useState } from 'react';
 
 
@@ -13,7 +13,7 @@ import { useState } from 'react';
 interface AuthState {
   pendingApproval: boolean;
   rejectedReason?: string;
-  userStatus?: RegristrationStatus;
+  userStatus?: RegistrationStatus;
 }
 
 export function useAuth() {
@@ -38,7 +38,7 @@ export function useAuth() {
     onSuccess: (data) => {
       const user = data.user;
 
-      if(user?.regristrationStatus === 'pending') {
+      if(user?.registrationStatus === 'pending') {
         setAuthState({
           pendingApproval: true,
           userStatus: 'pending',
@@ -50,7 +50,7 @@ export function useAuth() {
         return;
       }
 
-      if(user?.regristrationStatus === 'rejected') {
+      if(user?.registrationStatus === 'rejected') {
         setAuthState({
           pendingApproval: false,
           userStatus: 'rejected',
@@ -76,7 +76,7 @@ export function useAuth() {
       } else {
         router.push('/');
       }
-      
+
     },
 
     onError: (error: any) => {
@@ -145,12 +145,12 @@ export function useAuth() {
   return {
     user: currentUser,
     isLoading: !isHydrated || isLoading,
-    isAuthenticated: !!currentUser && !isError && currentUser.regristrationStatus === 'approved',
-    isAdmin: currentUser?.role === 'admin' && currentUser.regristrationStatus === 'approved',
+    isAuthenticated: !!currentUser && !isError && currentUser.registrationStatus === 'approved',
+    isAdmin: currentUser?.role === 'admin' && currentUser.registrationStatus === 'approved',
     isPending: authState.pendingApproval || authState.userStatus === 'pending',
     isRejected: authState.userStatus === 'rejected',
     rejectedReason: authState.rejectedReason,
-    userStatus: currentUser?.regristrationStatus || authState.userStatus,
+    userStatus: currentUser?.registrationStatus || authState.userStatus,
     login: loginMutation.mutate,
     register: RegistrationMutation.mutate,
     logout: logoutMutation.mutate,

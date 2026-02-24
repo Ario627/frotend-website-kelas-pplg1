@@ -112,7 +112,10 @@ export function useCreateAnnouncement() {
   return useMutation({
     mutationFn: (data: CreateAnnouncementDto) => announcementsApi.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+      console.log(
+        queryClient.getQueryData(['announcements','active'])
+      );
+      queryClient.invalidateQueries({ queryKey: ['announcements', 'active'] });
       toast.success('Announcement created');
     },
     onError: () => {
