@@ -57,7 +57,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
     >
       <PixelCard hover={false} className="p-0 overflow-hidden group">
         {/* Thumbnail */}
-        <div className="relative aspect-[4/3] bg-[rgb(var(--lavender))/0.3] overflow-hidden">
+        <div className="relative aspect-4/3g-[rgb(var(--lavender))/0.3] overflow-hidden">
           {thumbnailSrc ? (
             <Image
               src={thumbnailSrc}
@@ -85,7 +85,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
           <div className="absolute top-2 left-2">
             <span
               className={cn(
-                'inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-pixel border-[1px]',
+                'inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-pixel border',
                 item.type === 'video'
                   ? 'bg-[rgb(var(--peach))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]'
                   : 'bg-[rgb(var(--mint))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]',
@@ -99,7 +99,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
           {/* Category Badge */}
           {item.category && (
             <div className="absolute top-2 right-2">
-              <span className="inline-flex px-2 py-0.5 text-[9px] font-pixel bg-white/80 text-[rgb(var(--slate))] border-[1px] border-[rgb(var(--charcoal))/0.08]">
+              <span className="inline-flex px-2 py-0.5 text-[9px] font-pixel bg-white/80 text-[rgb(var(--slate))] border border-[rgb(var(--charcoal))/0.08]">
                 {item.category}
               </span>
             </div>

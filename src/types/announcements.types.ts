@@ -42,7 +42,7 @@ export interface Announcement {
   id: string;
   title: string;
   content: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   isActive: boolean;
   isPinned: boolean;
   viewCount: number;
@@ -63,7 +63,7 @@ export interface AnnouncementWithStats extends Announcement {
 export interface CreateAnnouncementDto {
   title: string;
   content: string;
-  priority?: 'low' | 'medium' | 'high';
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
   isActive?: boolean;
 }
 

@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'member';
   registrationStatus: RegistrationStatus;
   isActive: boolean;
   createdAt: Date;
@@ -42,7 +42,7 @@ export interface UpdateUserDto {
   email?: string;
   password?: string;
   avatarUrl?: string;
-  role?: 'admin' | 'user';
+  role?: 'admin' | 'member';
   status?: RegistrationStatus
   isActive?: boolean;
 }
@@ -60,7 +60,7 @@ export interface PendingUser {
   id: number;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'member';
   status: RegistrationStatus;
   createdAt: Date;
 }
