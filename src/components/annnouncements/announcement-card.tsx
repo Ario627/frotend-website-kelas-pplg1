@@ -27,6 +27,7 @@ const priorityConfig = {
   high: { icon: AlertCircle, bg: 'bg-[rgb(var(--error))/0.15]' },
   medium: { icon: AlertTriangle, bg: 'bg-[rgb(var(--warning))/0.15]' },
   low: { icon: Info, bg: 'bg-[rgb(var(--info))/0.15]' },
+  urgent: { icon: AlertCircle, bg: 'bg-[rgb(var(--error))/0.25]' },
 };
 
 interface AnnouncementCardProps {
