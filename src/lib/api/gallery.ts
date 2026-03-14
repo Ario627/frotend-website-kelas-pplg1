@@ -8,11 +8,13 @@ import type {
   AlbumDetail,
 } from '@/types/gallery.types';
 
-const cleanParams = (params?: GalleryQueryParams) =>
+const cleanParams = (
+  params?: GalleryQueryParams,
+): Partial<GalleryQueryParams> | undefined =>
   params
-    ? Object.fromEntries(
+    ? (Object.fromEntries(
         Object.entries(params).filter(([, value]) => value !== undefined),
-      )
+      ) as Partial<GalleryQueryParams>)
     : undefined;
 
 export const galleryApi = {

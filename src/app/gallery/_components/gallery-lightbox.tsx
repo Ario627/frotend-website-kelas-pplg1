@@ -118,7 +118,7 @@ export function GalleryLightbox({
 
                   {/* Media */}
                   <div className="relative overflow-hidden bg-black/40 flex items-center justify-center min-h-[280px] flex-1">
-                    {item.type === 'video' && item.youtubeVideoId ? (
+                    {item.type === 'video' && item.youtubeVideoId && /^[a-zA-Z0-9_-]{11}$/.test(item.youtubeVideoId) ? (
                       <div className="w-full aspect-video">
                         <iframe
                           src={`https://www.youtube.com/embed/${item.youtubeVideoId}?autoplay=1&rel=0`}

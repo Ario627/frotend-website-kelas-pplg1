@@ -175,7 +175,8 @@ export function GalleryClient({ initialType, initialCategory }: GalleryClientPro
       } else {
         params.delete('category');
       }
-      router.replace(`/gallery?${params.toString()}`, { scroll: false });
+      const query = params.toString();
+      router.replace(query ? `/gallery?${query}` : '/gallery', { scroll: false });
     },
     [router, searchParams],
   );
