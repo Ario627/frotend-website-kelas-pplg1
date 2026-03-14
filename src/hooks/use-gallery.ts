@@ -1,7 +1,7 @@
 'use client';
 
-import type { GalleryQueryParams } from "@/types/gallery.types";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { GalleryQueryParams, GalleryType } from "@/types/gallery.types";
+import { useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useRef } from "react";
 import { galleryApi } from "@/lib/api/gallery";
 
@@ -15,7 +15,28 @@ export function useGallery(params?: GalleryQueryParams) {
       params?.limit ?? 6
     ],
     queryFn: () => galleryApi.getAll(params),
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useInfiniteGallery(
+  params?: Omit<GalleryQueryParams, 'cursor' | 'page'>,
+) {
+  return useInfiniteQuery({
+    queryKey: [
+      'gallery',
+      'infinite',
+      params?.type ?? 'all',
+      params?.category ?? 'all',
+      params?.limit ?? 12,
+    ],
+    queryFn: ({ pageParam }: { pageParam: number | undefined }) =>
+      galleryApi.getAllCursor({ ...params, cursor: pageParam }),
+    initialPageParam: undefined as number | undefined,
+    getNextPageParam: (lastPage) =>
+      lastPage.meta?.hasMore ? (lastPage.meta.nextCursor ?? undefined) : undefined,
+    staleTime: 2 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 }
@@ -24,7 +45,24 @@ export function useGalleryCategories() {
   return useQuery({
     queryKey: ['gallery', 'categories'],
     queryFn: () => galleryApi.getCategories(),
-    staleTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 60 * 60 * 1000,
+  });
+}
+
+export function useAlbums() {
+  return useQuery({
+    queryKey: ['gallery', 'albums'],
+    queryFn: () => galleryApi.getAlbums(),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useAlbumDetail(id: number | null) {
+  return useQuery({
+    queryKey: ['gallery', 'album', id],
+    queryFn: () => galleryApi.getAlbumById(id!),
+    enabled: id !== null,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
@@ -41,7 +79,6 @@ export function useGalleryRecordView() {
         queryClient.invalidateQueries({ queryKey: ['gallery', 'published'] });
       }
     }).catch(() => {
-      // Silently fail - view tracking is non-critical
       viewedRef.current.delete(galleryItemId);
     });
   }, [queryClient]);
