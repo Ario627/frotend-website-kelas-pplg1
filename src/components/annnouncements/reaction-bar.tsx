@@ -87,7 +87,7 @@ function ReactionPill({ type, count, isActive, onClick, disabled }: ReactionPill
                 {count}
             </motion.span>
 
-            {/* Float-up particles */}
+            
             <AnimatePresence>
                 {particles.map((id) => (
                     <FloatingEmoji key={id} emoji={emoji} onDone={() => removeParticle(id)} />
@@ -143,7 +143,7 @@ export function ReactionBar({
 
     return (
         <div className="flex items-center gap-1.5 flex-wrap">
-            {/* Grouped emoji pills */}
+            
             <AnimatePresence mode="popLayout">
                 {visibleReactions.map((r) => (
                     <ReactionPill
@@ -157,7 +157,7 @@ export function ReactionBar({
                 ))}
             </AnimatePresence>
 
-            {/* Add reaction "+" button */}
+            
             <div className="relative">
                 <motion.button
                     whileHover={{ scale: 1.1 }}

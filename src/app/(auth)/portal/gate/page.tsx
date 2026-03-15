@@ -142,7 +142,7 @@ export default function LoginPage() {
   // Tampilan form login normal
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[rgb(var(--cream))] to-[rgb(var(--lavender))]">
-      {/* Subtle pixel decorations */}
+      
       <div className="fixed inset-0 pointer-events-none opacity-20">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[rgb(var(--mint))]" />
         <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-[rgb(var(--peach))]" />

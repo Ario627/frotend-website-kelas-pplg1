@@ -78,7 +78,7 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-[57vh] items-center justify-center px-4 pt-16 pb-10 overflow-hidden">
-      {/* Subtle Background Pattern */}
+      
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -92,7 +92,7 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Pixel Decorations */}
+      
       {pixelDecorations.map((decoration, index) => (
         <motion.div
           key={index}
@@ -111,7 +111,7 @@ export function HeroSection() {
         />
       ))}
 
-      {/* Additional geometric pixel shapes */}
+      
       <motion.div
         className="absolute top-[30%] left-[5%] w-6 h-1 bg-[rgb(var(--mint))] opacity-30"
         animate={{ scaleX: [1, 1.5, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -133,7 +133,7 @@ export function HeroSection() {
         transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' as const }}
       />
 
-      {/* Cross shapes */}
+      
       <motion.div
         className="absolute top-[18%] left-[25%] opacity-20"
         animate={{ rotate: [0, 180, 360], scale: [1, 1.2, 1] }}
@@ -151,21 +151,21 @@ export function HeroSection() {
         <div className="w-1 h-4 bg-[rgb(var(--peach))] absolute top-0 left-1/2 -translate-x-1/2" />
       </motion.div>
 
-      {/* Main Content */}
+      
       <motion.div
         className="relative z-10 text-center max-w-3xl mx-auto"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Small Badge */}
+        
         <motion.div variants={itemVariants} className="mb-6">
           <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[rgb(var(--lavender))] text-xs text-[rgb(var(--slate))]">
             Tahap Development ya guyss
           </span>
         </motion.div>
 
-        {/* Main Heading with Scatter Animation */}
+        
         <motion.h1
           variants={itemVariants}
           className="font-pixel text-2xl sm:text-3xl md:text-4xl text-[rgb(var(--charcoal))] mb-4 leading-relaxed relative"
@@ -215,7 +215,7 @@ export function HeroSection() {
           </span>
         </motion.h1>
 
-        {/* Subtitle */}
+        
         <motion.p
           variants={itemVariants}
           className="text-[rgb(var(--slate))] max-w-lg mx-auto mb-10 text-base sm:text-lg leading-relaxed"
@@ -223,7 +223,7 @@ export function HeroSection() {
           Gassss terussss
         </motion.p>
 
-        {/* CTA Buttons */}
+        
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row items-center justify-center gap-3"
@@ -236,7 +236,7 @@ export function HeroSection() {
           </Link>
         </motion.div>
 
-        {/* Quick Stats - Subtle */}
+        
         <motion.div
           variants={itemVariants}
           className="mt-16 flex items-center justify-center gap-8 sm:gap-12"

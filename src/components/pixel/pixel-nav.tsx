@@ -24,7 +24,7 @@ export function PixelNav() {
     <nav className="sticky top-0 z-50 bg-[rgb(var(--cream))]/95 backdrop-blur-sm border-b border-[rgb(var(--border))]">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
+          
           <Link 
             href="/" 
             className="font-pixel text-sm text-[rgb(var(--charcoal))] flex items-center gap-1.5 hover:opacity-80 transition-opacity"
@@ -32,7 +32,7 @@ export function PixelNav() {
             PPLG
           </Link>
 
-          {/* Desktop Navigation */}
+          
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -60,7 +60,7 @@ export function PixelNav() {
             })}
           </div>
 
-          {/* Mobile Menu Button */}
+          
           <button
             className="md:hidden p-2 text-[rgb(var(--charcoal))]"
             onClick={() => setIsOpen(!isOpen)}
@@ -70,7 +70,7 @@ export function PixelNav() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        
         <AnimatePresence>
           {isOpen && (
             <motion.div

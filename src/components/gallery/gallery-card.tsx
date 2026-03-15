@@ -6,7 +6,7 @@ import Image from 'next/image';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { PixelCard } from '../pixel/pixel-card';
 import { useGalleryRecordView } from '@/hooks/use-gallery';
-import { Eye, Play, ImageIcon, Calendar } from 'lucide-react';
+import { Eye, Play, ImageIcon, Calendar, Clapperboard } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import type { GalleryItem } from '@/types/gallery.types';
 
@@ -18,7 +18,6 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
   const cardRef = useRef<HTMLDivElement>(null);
   const { recordView } = useGalleryRecordView();
 
-  // Record view when card becomes visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -40,7 +39,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
   const thumbnailSrc =
     item.type === 'video'
       ? item.thumbnailUrl ?? `https://img.youtube.com/vi/${item.youtubeVideoId}/hqdefault.jpg`
-      : item.thumbnailUrl ?? item.imageUrl;
+      : item.thumbnailUrl ?? item.responsive?.thumbnail ?? item.imageUrl;
 
   const formattedDate = new Intl.DateTimeFormat('id-ID', {
     day: 'numeric',
@@ -56,8 +55,8 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
       layout
     >
       <PixelCard hover={false} className="p-0 overflow-hidden group">
-        {/* Thumbnail */}
-        <div className="relative aspect-4/3g-[rgb(var(--lavender))/0.3] overflow-hidden">
+        
+        <div className="relative aspect-4/3 bg-[rgb(var(--lavender))/0.3] overflow-hidden">
           {thumbnailSrc ? (
             <Image
               src={thumbnailSrc}
@@ -72,7 +71,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
             </div>
           )}
 
-          {/* Video Play Overlay */}
+          
           {item.type === 'video' && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
               <div className="w-10 h-10 bg-white/90 flex items-center justify-center shadow-[2px_2px_0_rgb(var(--shadow)/0.3)]">
@@ -81,22 +80,38 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
             </div>
           )}
 
-          {/* Type Badge */}
+          
+          {item.type === 'live_photo' && (
+            <div className="absolute bottom-2 right-2">
+              <div className="w-7 h-7 bg-white/85 flex items-center justify-center shadow-[1px_1px_0_rgb(var(--shadow)/0.25)]">
+                <Play size={11} className="text-[rgb(var(--charcoal))] ml-0.5" />
+              </div>
+            </div>
+          )}
+
+          
           <div className="absolute top-2 left-2">
             <span
               className={cn(
                 'inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-pixel border',
                 item.type === 'video'
                   ? 'bg-[rgb(var(--peach))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]'
-                  : 'bg-[rgb(var(--mint))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]',
+                  : item.type === 'live_photo'
+                    ? 'bg-[rgb(var(--sky))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]'
+                    : 'bg-[rgb(var(--mint))] text-[rgb(var(--charcoal))] border-[rgb(var(--charcoal))/0.1]',
               )}
             >
-              {item.type === 'video' ? <Play size={8} /> : <ImageIcon size={8} />}
-              {item.type === 'video' ? 'Video' : 'Foto'}
+              {item.type === 'video' ? (
+                <><Play size={8} /> Video</>
+              ) : item.type === 'live_photo' ? (
+                <><Clapperboard size={8} /> Live</>
+              ) : (
+                <><ImageIcon size={8} /> Foto</>
+              )}
             </span>
           </div>
 
-          {/* Category Badge */}
+          
           {item.category && (
             <div className="absolute top-2 right-2">
               <span className="inline-flex px-2 py-0.5 text-[9px] font-pixel bg-white/80 text-[rgb(var(--slate))] border border-[rgb(var(--charcoal))/0.08]">
@@ -106,7 +121,7 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
           )}
         </div>
 
-        {/* Content */}
+        
         <div className="p-3">
           <h3 className="font-pixel text-xs text-[rgb(var(--charcoal))] mb-1.5 line-clamp-1">
             {item.title}
@@ -118,9 +133,8 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
             </p>
           )}
 
-          {/* Footer — Views & Date */}
+          
           <div className="flex items-center justify-between pt-2 border-t border-[rgb(var(--border))]">
-            {/* Views */}
             <Tooltip.Provider delayDuration={300}>
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
@@ -141,7 +155,6 @@ export const GalleryCard = memo(function GalleryCard({ item }: GalleryCardProps)
               </Tooltip.Root>
             </Tooltip.Provider>
 
-            {/* Date */}
             <div className="flex items-center gap-1 text-[rgb(var(--muted))]">
               <Calendar size={10} />
               <span className="text-[10px]">{formattedDate}</span>

@@ -97,14 +97,14 @@ export const AnnouncementCard = memo(function AnnouncementCard({
           : ''
           }`}
       >
-        {/* Pinned Badge */}
+        
         {announcement.isPinned && (
           <div className="absolute -top-1.5 -right-1.5 bg-[rgb(var(--mint))] p-1 shadow-sm">
             <Pin size={10} className="text-[rgb(var(--charcoal))]" />
           </div>
         )}
 
-        {/* Header */}
+        
         <div className="flex items-start justify-between gap-2 mb-2 sm:mb-3">
           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
             <div className={`p-1 sm:p-1.5 shrink-0 ${priority.bg}`}>
@@ -115,7 +115,7 @@ export const AnnouncementCard = memo(function AnnouncementCard({
             </span>
           </div>
 
-          {/* Admin Menu */}
+          
           <AnimatePresence>
             {canShowAdminMenu &&  (
               <motion.div
@@ -168,7 +168,7 @@ export const AnnouncementCard = memo(function AnnouncementCard({
           </AnimatePresence>
         </div>
 
-        {/* Content */}
+        
         <h3 className="font-pixel text-[11px] sm:text-xs text-[rgb(var(--charcoal))] mb-1.5 sm:mb-2 line-clamp-2">
           {announcement.title}
         </h3>
@@ -176,9 +176,9 @@ export const AnnouncementCard = memo(function AnnouncementCard({
           {announcement.content}
         </p>
 
-        {/* Footer - Views & Reactions */}
+        
         <div className="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-[rgb(var(--border))] gap-2">
-          {/* Views */}
+          
           <Tooltip.Provider delayDuration={300}>
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
@@ -199,7 +199,7 @@ export const AnnouncementCard = memo(function AnnouncementCard({
             </Tooltip.Root>
           </Tooltip.Provider>
 
-          {/* Discord-style Reactions */}
+          
           <ReactionBar
             announcementId={announcement.id}
             reactions={announcement.reactions || []}

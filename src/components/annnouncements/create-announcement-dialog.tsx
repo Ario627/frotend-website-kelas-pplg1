@@ -79,7 +79,7 @@ export function CreateAnnouncementDialog({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="fixed inset-x-4 top-1/2 -translate-y-1/2 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 z-50 w-auto sm:w-full sm:max-w-lg max-h-[85vh] overflow-y-auto bg-white border border-[rgb(var(--border))] shadow-[4px_4px_0_rgb(var(--shadow)/0.3)] p-4 sm:p-6"
           >
-            {/* Header */}
+            
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <Dialog.Title className="font-pixel text-xs sm:text-sm text-[rgb(var(--charcoal))]">
                 Buat Pengumuman
@@ -93,7 +93,7 @@ export function CreateAnnouncementDialog({
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
-              {/* Title */}
+              
               <div className="space-y-1.5">
                 <Label htmlFor="title" className="text-xs font-medium">
                   Judul <span className="text-[rgb(var(--error))]">*</span>
@@ -111,7 +111,7 @@ export function CreateAnnouncementDialog({
                 )}
               </div>
 
-              {/* Content */}
+              
               <div className="space-y-1.5">
                 <Label htmlFor="content" className="text-xs font-medium">
                   Konten <span className="text-[rgb(var(--error))]">*</span>
@@ -130,7 +130,7 @@ export function CreateAnnouncementDialog({
                 )}
               </div>
 
-              {/* Priority */}
+              
               <div className="space-y-1.5">
                 <Label htmlFor="priority" className="text-xs font-medium">
                   Prioritas
@@ -147,7 +147,7 @@ export function CreateAnnouncementDialog({
                 </select>
               </div>
 
-              {/* Actions */}
+              
               <div className="flex justify-end gap-3 pt-4 border-t border-[rgb(var(--border))]">
                 <PixelButton
                   type="button"

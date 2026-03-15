@@ -66,7 +66,7 @@ export function EmojiPicker({ onSelect, onClose, disabled }: EmojiPickerProps) {
                 >
                     {REACTION_EMOJI_MAP[type]}
 
-                    {/* Tooltip label */}
+                    
                     <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-[rgb(var(--charcoal))] text-white text-[9px] px-1.5 py-0.5 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         {REACTION_LABELS[type]}
                     </span>

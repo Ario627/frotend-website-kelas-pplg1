@@ -47,7 +47,7 @@ export function AnnouncementPreview() {
     <>
       <section className="py-6 sm:py-10 px-3 sm:px-4">
         <div className="container mx-auto max-w-5xl">
-          {/* Header */}
+          
           <div className="flex items-center justify-between mb-5 sm:mb-8">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-1.5 sm:p-2 bg-[rgb(var(--peach))/0.3]">
@@ -79,7 +79,7 @@ export function AnnouncementPreview() {
             </div>
           </div>
 
-          {/* Content */}
+          
           {isPending ? (
             <div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[1, 2, 3].map((i) => (

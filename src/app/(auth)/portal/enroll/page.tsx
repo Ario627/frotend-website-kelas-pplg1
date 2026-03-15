@@ -108,7 +108,7 @@ export default function RegisterPage() {
   // Tampilan form pendaftaran normal
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-[rgb(var(--cream))] to-[rgb(var(--lavender))]">
-      {/* Subtle pixel decorations */}
+      
       <div className="fixed inset-0 pointer-events-none opacity-20">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[rgb(var(--mint))]" />
         <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-[rgb(var(--peach))]" />
@@ -125,7 +125,7 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {/* Info Banner */}
+        
         <div className="bg-[rgb(var(--info))]/10 pixel-border p-3 mb-6">
           <p className="text-xs text-[rgb(var(--charcoal))]">
             <strong>Perhatian:</strong> Pendaftaran memerlukan persetujuan admin sebelum dapat login.
@@ -258,7 +258,7 @@ export default function RegisterPage() {
           </PixelButton>
         </form>
 
-        {/* Info box */}
+        
         <div className="mt-6 p-3 bg-[rgb(var(--info))]/90 pixel-border text-xs">
           <strong>Catatan:</strong>
             <p className="text-xs">
